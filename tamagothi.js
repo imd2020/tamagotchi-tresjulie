@@ -11,7 +11,7 @@ let aloPlant = new Plant(100, 100, 400, 350);
 let firstButton = new Button(100, 100, "Start");
 let waterButton = new Button(300, 450, "Wasser");
 let compliments = new Button(100, 450, "Compliments");
-let sprechblase = new Speechbubble(350, 50, 80, 70);
+let sprechblase = new Speechbubble(350, 80, 150, 30);
 
 function draw() {
   clear();
@@ -35,11 +35,17 @@ function draw() {
 
   if (state === "Komplimente") {
     sprechblase.displaySpeech();
+    sprechblase.count();
     aloPlant.displayPlant();
     wasserAnzeige.displayThursty();
+    wasserAnzeige.displayWater();
     waterButton.displayButton();
-    wasserAnzeige.waterRise();
     compliments.displayButton();
+    if (sprechblase.timer == 0) {
+      state = "gameScreen";
+      //achtung hier mit der Wasseranzeige. Die muss den aktuellen Stand behalten
+      //vielleicht sollte ich die einfach dann auf jedem Screen einfach einzeln anzeigen lassen
+    }
   }
 }
 
@@ -64,8 +70,9 @@ function mouseClicked() {
   }
   if (compliments.hitTest()) {
     state = "Komplimente";
-    console.log("yippie");
+    console.log("Kompliment gemacht");
   }
+
   // if (state === "Wassermarsch" && waterButton.hitTest()) {
   //   console.log("Wasser zweimal gedrückt");
   //   wasserAnzeige.waterRise();
