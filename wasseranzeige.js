@@ -7,7 +7,7 @@ export default class Thirsty {
     this.color = color;
     this.h = 0;
   }
-  displayThursty() {
+  displayBar() {
     push();
     noFill();
     strokeWeight(5);
@@ -41,16 +41,10 @@ export default class Thirsty {
     rect(2, 0, this.width - 4, this.h - 20, 20);
     this.h = this.h - 2;
     pop();
-    if (this.h < -40) {
-      this.h = -40;
-    }
-  }
-  waterStop() {
-    if (this.h > this.y - 100) {
-      this.h = this.h;
-      console.log("stopp");
-      return true;
-    }
+
+    // if (this.h < -40) {
+    //   this.h = -40;
+    // }
   }
 }
 

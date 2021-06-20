@@ -1,6 +1,6 @@
 /*darf meine persönliche Handschrift aus ganz 
 vielen Booleans und strings bestehen? ;) */
-
+let wasserStand = "leer";
 let state = "start";
 import Speechbubble from "./speechbubble.js";
 import Button from "./button_Alo.js";
@@ -15,29 +15,62 @@ let sprechblase = new Speechbubble(350, 80, 150, 30);
 
 function draw() {
   clear();
+  console.log(wasserStand);
   if (state === "start") {
     firstButton.displayButton();
   }
   if (state === "gameScreen") {
-    wasserAnzeige.displayThursty();
+    sprechblase.timer = 3;
+    sprechblase.message = random(sprechblase.randomMessages);
+    wasserAnzeige.displayBar();
     aloPlant.displayPlant();
     wasserAnzeige.displayWater();
     waterButton.displayButton();
     compliments.displayButton();
   }
-  if (state === "Wassermarsch") {
+  if (state === "Wassermarsch1") {
+    compliments.displayButton();
     aloPlant.displayPlant();
-    wasserAnzeige.displayThursty();
+    wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
-    compliments.displayButton();
-  }
 
+    if (wasserAnzeige.h < -40) {
+      wasserAnzeige.h = -40;
+      wasserStand = "einDrittel";
+    }
+    if (wasserStand === "einDrittel") {
+      wasserAnzeige.h = -40;
+    }
+
+    //nur raus gemacht weil nervig
+    if (wasserAnzeige.h === -40 && wasserStand === "einDrittel") {
+      wasserAnzeige.h = wasserAnzeige.h + 60;
+    }
+  }
+  if (state === "Wassermarsch2") {
+    wasserAnzeige.displayBar();
+    waterButton.displayButton();
+    wasserAnzeige.waterRise();
+    if (wasserAnzeige.h < -120) {
+      wasserAnzeige.h = -120;
+    }
+
+    if (state === "Wassermarsch3") {
+      wasserAnzeige.displayBar();
+      waterButton.displayButton();
+      wasserAnzeige.waterRise();
+      if (wasserAnzeige.h < -180) {
+        wasserAnzeige.h = -180;
+      }
+    }
+  }
   if (state === "Komplimente") {
     sprechblase.displaySpeech();
     sprechblase.count();
+    sprechblase.displayCompliments();
     aloPlant.displayPlant();
-    wasserAnzeige.displayThursty();
+    wasserAnzeige.displayBar();
     wasserAnzeige.displayWater();
     waterButton.displayButton();
     compliments.displayButton();
@@ -59,22 +92,38 @@ function mouseClicked() {
   if (firstButton.hitTest()) {
     state = "gameScreen";
   }
-
   if (waterButton.hitTest()) {
-    state = "Wassermarsch";
+    state = "Wassermarsch1";
     console.log("Wasser gedrückt");
-  }
-  if (waterButton.hitTest() && this.h === -40) {
-    console.log("Button nochmal gedrückt");
-    this.h = this.h - 20;
   }
   if (compliments.hitTest()) {
     state = "Komplimente";
     console.log("Kompliment gemacht");
   }
+  if (
+    state === "Wassermarsch1" &&
+    wasserAnzeige.h === -40 &&
+    waterButton.hitTest()
+  ) {
+    state = "Wassermarsch2";
+    wasserAnzeige.waterRise();
+    console.log("Wasser nochmal gedrückt");
+  }
 
-  // if (state === "Wassermarsch" && waterButton.hitTest()) {
-  //   console.log("Wasser zweimal gedrückt");
-  //   wasserAnzeige.waterRise();
-  // }
+  if (
+    state === "Wassermarsch2" &&
+    wasserAnzeige.h === -120 &&
+    waterButton.hitTest()
+  ) {
+    state = "Wassermarsch3";
+    wasserAnzeige.waterRise();
+    console.log("Wasser zum dritten Mal gedrückt");
+  }
+
+  //ich überschreibe hier nicht die Wasseranzeige.h sondern legen
+  //nur States über States und deswgen springe ich auch von
+  //wassermarsch2 nicht auf Wassermarsch3 weil im Hintergrund
+  //immer noch die Zeile 99 ausgeführt wird
+  //das ist die Aktion wo "Wasser nochmal gedrückt" in
+  //der console steht
 }

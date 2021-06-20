@@ -1,4 +1,5 @@
 //Button Größe flexibel machen
+//texte im Button anpassen
 export default class Button {
   constructor(x, y, message) {
     this.x = x;
