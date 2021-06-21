@@ -1,5 +1,17 @@
 /*darf meine persönliche Handschrift aus ganz 
 vielen Booleans und strings bestehen? ;) */
+
+//WAS ICH NOCH MACHEN MUSS:
+//Mit den States klar kommen
+//ich brauche wahrscheinlich für die Wasseranzeige einen ganz eigenen Modus
+//der Wasserstand muss ja auch in jedem State den aktuellen Stand haben
+//sollte ich den Wasserstand vielleicht in einer Variable oder so speichern?
+//Der Stae "einDrittel" funktioniert nicht so
+//mit dem habe ich versucht das Genießen (Waterbutton.hitTest()) dreimal durchzuführen
+//Die Wasserleiste soll sich in drei Teilen füllen.
+//bis jetzt geht nur,das zweimal gießen
+//beim dritten Mal klicken springt man auf den Screen davor siehe Zeile 136
+let spielfläche = loadImage("Alo_Game_screen.png");
 let wasserStand = "leer";
 let state = "start";
 import Speechbubble from "./speechbubble.js";
@@ -15,22 +27,25 @@ let sprechblase = new Speechbubble(350, 80, 150, 30);
 
 function draw() {
   clear();
-  console.log(wasserStand);
+  image(spielfläche, 0, 0, 800, 600);
+  // console.log(wasserStand);
   if (state === "start") {
     firstButton.displayButton();
   }
   if (state === "gameScreen") {
+    image(spielfläche, 0, 0, 800, 600);
     sprechblase.timer = 3;
     sprechblase.message = random(sprechblase.randomMessages);
     wasserAnzeige.displayBar();
-    aloPlant.displayPlant();
+    // aloPlant.displayPlant(); die habe ich rausgenommen, weil die sonst stört
     wasserAnzeige.displayWater();
     waterButton.displayButton();
     compliments.displayButton();
   }
   if (state === "Wassermarsch1") {
+    image(spielfläche, 0, 0, 800, 600);
     compliments.displayButton();
-    aloPlant.displayPlant();
+    // aloPlant.displayPlant();
     wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
@@ -44,11 +59,13 @@ function draw() {
     }
 
     //nur raus gemacht weil nervig
-    if (wasserAnzeige.h === -40 && wasserStand === "einDrittel") {
-      wasserAnzeige.h = wasserAnzeige.h + 60;
-    }
+    // if (wasserAnzeige.h === -40 && wasserStand === "einDrittel") {
+    //   wasserAnzeige.h = wasserAnzeige.h + 60;
+    // }
   }
   if (state === "Wassermarsch2") {
+    image(spielfläche, 0, 0, 800, 600);
+    compliments.displayButton();
     wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
@@ -66,10 +83,12 @@ function draw() {
     }
   }
   if (state === "Komplimente") {
+    //d er funktioniert schon ganz gut :)
+    image(spielfläche, 0, 0, 800, 600);
     sprechblase.displaySpeech();
     sprechblase.count();
     sprechblase.displayCompliments();
-    aloPlant.displayPlant();
+    // aloPlant.displayPlant();
     wasserAnzeige.displayBar();
     wasserAnzeige.displayWater();
     waterButton.displayButton();
