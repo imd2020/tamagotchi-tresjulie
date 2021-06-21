@@ -47,16 +47,3 @@ export default class Thirsty {
     // }
   }
 }
-
-// waterRise(r, g, b) {
-//   let y = 0;
-//   let z = 0;
-//   y = y - 50;
-//   z = z + 20;
-//   push();
-//   translate(this.x + this.width / 2, this.y + this.height - 15);
-//   fill(r, g, b);
-//   noStroke();
-//   circle(0, y, this.width / 2 + 10);
-//   pop();
-// }

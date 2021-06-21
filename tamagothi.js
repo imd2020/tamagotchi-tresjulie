@@ -20,16 +20,18 @@ import Plant from "./plant.js";
 import Thirsty from "./wasseranzeige.js";
 let wasserAnzeige = new Thirsty(100, 200, 30, 200);
 let aloPlant = new Plant(100, 100, 400, 350);
-let firstButton = new Button(100, 100, "Start");
-let waterButton = new Button(300, 450, "Wasser");
-let compliments = new Button(100, 450, "Compliments");
+let firstButton = new Button(100, 100, 60, 30, "Start");
+let waterButton = new Button(300, 450, 60, 30, "Water");
+let compliments = new Button(100, 450, 90, 30, "Compliments");
 let sprechblase = new Speechbubble(350, 80, 150, 30);
 
 function draw() {
   clear();
-  image(spielfläche, 0, 0, 800, 600);
+  console.log("state=" + state);
+
   // console.log(wasserStand);
   if (state === "start") {
+    image(spielfläche, 0, 0, 800, 600);
     firstButton.displayButton();
   }
   if (state === "gameScreen") {
@@ -42,6 +44,7 @@ function draw() {
     waterButton.displayButton();
     compliments.displayButton();
   }
+
   if (state === "Wassermarsch1") {
     image(spielfläche, 0, 0, 800, 600);
     compliments.displayButton();
@@ -50,40 +53,40 @@ function draw() {
     waterButton.displayButton();
     wasserAnzeige.waterRise();
 
-    if (wasserAnzeige.h < -40) {
-      wasserAnzeige.h = -40;
-      wasserStand = "einDrittel";
-    }
-    if (wasserStand === "einDrittel") {
+    if (wasserAnzeige.h < -40 && wasserAnzeige.h >= -119) {
       wasserAnzeige.h = -40;
     }
 
     //nur raus gemacht weil nervig
-    // if (wasserAnzeige.h === -40 && wasserStand === "einDrittel") {
-    //   wasserAnzeige.h = wasserAnzeige.h + 60;
+    // if (wasserAnzeige.h === -40) {
+    //   wasserAnzeige.h = wasserAnzeige.h + 10;
     // }
   }
   if (state === "Wassermarsch2") {
+    image(spielfläche, 0, 0, 800, 600);
+    text("wir sind in 2", 100, 100);
+    compliments.displayButton();
+    wasserAnzeige.displayBar();
+    waterButton.displayButton();
+    wasserAnzeige.waterRise();
+    if (wasserAnzeige.h < -120 && wasserAnzeige.h > -174) {
+      wasserAnzeige.h = -120;
+    }
+  }
+
+  if (state === "Wassermarsch3") {
     image(spielfläche, 0, 0, 800, 600);
     compliments.displayButton();
     wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
-    if (wasserAnzeige.h < -120) {
-      wasserAnzeige.h = -120;
-    }
-
-    if (state === "Wassermarsch3") {
-      wasserAnzeige.displayBar();
-      waterButton.displayButton();
-      wasserAnzeige.waterRise();
-      if (wasserAnzeige.h < -180) {
-        wasserAnzeige.h = -180;
-      }
+    if (wasserAnzeige.h < -175 && wasserAnzeige.h > -200) {
+      wasserAnzeige.h = -175;
     }
   }
+
   if (state === "Komplimente") {
-    //d er funktioniert schon ganz gut :)
+    //der funktioniert schon ganz gut :)
     image(spielfläche, 0, 0, 800, 600);
     sprechblase.displaySpeech();
     sprechblase.count();
@@ -95,9 +98,9 @@ function draw() {
     compliments.displayButton();
     if (sprechblase.timer == 0) {
       state = "gameScreen";
-      //achtung hier mit der Wasseranzeige. Die muss den aktuellen Stand behalten
-      //vielleicht sollte ich die einfach dann auf jedem Screen einfach einzeln anzeigen lassen
     }
+    //achtung hier mit der Wasseranzeige. Die muss den aktuellen Stand behalten
+    //vielleicht sollte ich die einfach dann auf jedem Screen einfach einzeln anzeigen lassen
   }
 }
 
@@ -111,14 +114,17 @@ function mouseClicked() {
   if (firstButton.hitTest()) {
     state = "gameScreen";
   }
-  if (waterButton.hitTest()) {
+  if (waterButton.hitTest() && state === "gameScreen") {
     state = "Wassermarsch1";
-    console.log("Wasser gedrückt");
+    // console.log("Wasser gedrückt");
+    console.log(wasserAnzeige.h);
   }
+
   if (compliments.hitTest()) {
     state = "Komplimente";
     console.log("Kompliment gemacht");
   }
+
   if (
     state === "Wassermarsch1" &&
     wasserAnzeige.h === -40 &&
@@ -126,7 +132,7 @@ function mouseClicked() {
   ) {
     state = "Wassermarsch2";
     wasserAnzeige.waterRise();
-    console.log("Wasser nochmal gedrückt");
+    console.log("Wasser zwei mal gedrückt");
   }
 
   if (
@@ -137,6 +143,13 @@ function mouseClicked() {
     state = "Wassermarsch3";
     wasserAnzeige.waterRise();
     console.log("Wasser zum dritten Mal gedrückt");
+  }
+  if (
+    state === "Wassermarsch3" &&
+    wasserAnzeige.h === -180 &&
+    waterButton.hitTest()
+  ) {
+    wasserAnzeige.h = -180;
   }
 
   //ich überschreibe hier nicht die Wasseranzeige.h sondern legen

@@ -9,8 +9,11 @@ export default class Speechbubble {
     this.message = random(this.randomMessages);
   }
   displaySpeech() {
+    push();
     fill(255);
+    noStroke();
     rect(this.x, this.y, this.width, this.height, 30);
+    pop();
     push();
     fill(255);
     noStroke();
@@ -22,7 +25,7 @@ export default class Speechbubble {
     push();
     fill(0);
     textSize(12);
-    text(this.message, this.x + 10, this.y + 10);
+    text(this.message, this.x + 10, this.y + 20);
     pop();
   }
   count() {

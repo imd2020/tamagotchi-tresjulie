@@ -1,26 +1,28 @@
 //Button Größe flexibel machen
 //texte im Button anpassen
 export default class Button {
-  constructor(x, y, message) {
+  constructor(x, y, width, height, message) {
     this.x = x;
     this.y = y;
+    this.width = width;
+    this.height = height;
     this.message = message;
   }
   displayButton() {
     fill(255);
-    rect(this.x, this.y, 90, 30, 20);
+    rect(this.x, this.y, this.width, this.height, 20);
     push();
     stroke(0);
     noFill();
-    text(this.message, this.x + 30, this.y + 20);
+    text(this.message, this.x + 10, this.y + 20);
     pop();
   }
   hitTest() {
     if (
       mouseX >= this.x &&
-      mouseX <= this.x + 90 &&
+      mouseX <= this.x + this.width &&
       mouseY >= this.y &&
-      mouseY <= this.y + 30
+      mouseY <= this.y + this.height
     ) {
       return true;
     } else {
