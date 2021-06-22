@@ -15,21 +15,15 @@ export default class Thirsty {
     rect(this.x, this.y, this.width, this.height, 20);
     pop();
   }
-  displayWaterball(r, g, b) {
-    push();
-    translate(this.x + this.width / 2, this.y + this.height - 15);
-    fill(r, g, b);
-    noStroke();
-    circle(0, 0, this.width / 2 + 10);
-    pop();
-  }
+
   displayWater() {
     //funktioniert irgendwie
     push();
     noStroke();
     fill(50, 180, 200);
     translate(this.x, this.y + this.height - 3);
-    rect(2, 0, this.width - 4, this.h - 20, 20);
+    rotate(PI);
+    rect(-this.width + 2, 0, this.width - 4, Math.abs(this.h - 20), 20);
     pop();
   }
   waterRise() {
@@ -38,12 +32,9 @@ export default class Thirsty {
     noStroke();
     fill(50, 180, 200);
     translate(this.x, this.y + this.height - 3);
-    rect(2, 0, this.width - 4, this.h - 20, 20);
+    rotate(PI);
+    rect(-this.width + 2, 0, this.width - 4, Math.abs(this.h - 20), 20);
     this.h = this.h - 2;
     pop();
-
-    // if (this.h < -40) {
-    //   this.h = -40;
-    // }
   }
 }

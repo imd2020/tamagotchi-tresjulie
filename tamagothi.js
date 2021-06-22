@@ -14,41 +14,57 @@ vielen Booleans und strings bestehen? ;) */
 //bis jetzt geht nur,das zweimal gießen
 //beim dritten Mal klicken springt man auf den Screen davor siehe Zeile 136
 let spielfläche = loadImage("Alo_Game_screen.png");
-let wasserStand = "leer";
+let wasserstandTimer3 = 0;
+let wasserstandTimer2 = 0;
+let wasserstandTimer1 = 0;
 let state = "start";
 import Speechbubble from "./speechbubble.js";
 import Button from "./button_Alo.js";
 import Plant from "./plant.js";
 import Thirsty from "./wasseranzeige.js";
 let wasserAnzeige = new Thirsty(100, 200, 30, 200);
-let aloPlant = new Plant(100, 100, 400, 350);
+let aloPlant = new Plant(400, 320, 150, 200);
 let firstButton = new Button(100, 100, 60, 30, "Start");
-let waterButton = new Button(300, 450, 60, 30, "Water");
-let compliments = new Button(100, 450, 90, 30, "Compliments");
-let sprechblase = new Speechbubble(350, 80, 150, 30);
+let waterButton = new Button(95, 450, 60, 30, "Water");
+let compliments = new Button(580, 450, 90, 30, "Compliments");
+let sprechblase = new Speechbubble(500, 250, 150, 30);
 
 function draw() {
   clear();
-  console.log("state=" + state);
+
+  // console.log("state=" + state);
+  // console.log("Wasser= " + wasserAnzeige.h);
+
+  // if (frameCount % 30 === 0 && sprechblase.timer > 0) {
+  //   sprechblase.timer = sprechblase.timer - 1;
+  // }
 
   if (state === "start") {
     image(spielfläche, 0, 0, 800, 600);
     firstButton.displayButton();
+    aloPlant.displayPlant();
   }
   if (state === "gameScreen") {
     image(spielfläche, 0, 0, 800, 600);
-    sprechblase.timer = 3;
+    wasserstandTimer1 = 0;
+    aloPlant.displayPlant();
+    sprechblase.timer = 4; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
     sprechblase.message = random(sprechblase.randomMessages);
     wasserAnzeige.displayBar();
-    wasserAnzeige.displayWater();
     waterButton.displayButton();
     compliments.displayButton();
+    wasserAnzeige.displayWater();
   }
 
   if (state === "Wassermarsch1") {
     image(spielfläche, 0, 0, 800, 600);
     compliments.displayButton();
-    // aloPlant.displayPlant();
+    wasserstandTimer1++;
+    console.log("Timer1=" + wasserstandTimer1);
+    wasserstandTimer2 = 0;
+    sprechblase.timer = 4; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
+    sprechblase.message = random(sprechblase.randomMessages);
+    aloPlant.displayPlant();
     wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
@@ -56,51 +72,136 @@ function draw() {
     if (wasserAnzeige.h < -40 && wasserAnzeige.h >= -119) {
       wasserAnzeige.h = -40;
     }
-
-    //nur raus gemacht weil nervig
-    // if (wasserAnzeige.h === -40) {
-    //   wasserAnzeige.h = wasserAnzeige.h + 10;
-    // }
+    if (wasserAnzeige.h < -175 && wasserAnzeige.h > -200) {
+      wasserAnzeige.h = -175;
+    }
+    if (wasserAnzeige.h === -40 && wasserstandTimer1 === 60) {
+      wasserAnzeige.h = 0;
+      state = "gameScreen";
+    }
   }
   if (state === "Wassermarsch2") {
     image(spielfläche, 0, 0, 800, 600);
-    text("wir sind in 2", 100, 100);
+    console.log("Timer2= " + wasserstandTimer2);
+    wasserstandTimer1 = 0;
+    wasserstandTimer2++;
+    sprechblase.timer = 4; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
+    sprechblase.message = random(sprechblase.randomMessages);
+    wasserstandTimer3 = 0;
     compliments.displayButton();
+    aloPlant.displayPlant();
     wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
     if (wasserAnzeige.h < -120 && wasserAnzeige.h > -174) {
       wasserAnzeige.h = -120;
     }
+    if (wasserAnzeige.h === -120 && wasserstandTimer2 === 60) {
+      wasserAnzeige.h = -40;
+      state = "Wassermarsch1";
+    }
   }
 
   if (state === "Wassermarsch3") {
     image(spielfläche, 0, 0, 800, 600);
+    wasserstandTimer3++;
+    wasserstandTimer2 = 0;
+    console.log("Timer3= " + wasserstandTimer3);
     compliments.displayButton();
+    aloPlant.displayPlant();
     wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
     if (wasserAnzeige.h < -175 && wasserAnzeige.h > -200) {
       wasserAnzeige.h = -175;
     }
+    if (wasserAnzeige.h === -175 && wasserstandTimer3 === 60) {
+      wasserAnzeige.h = -120;
+      state = "Wassermarsch2";
+    }
   }
-
   if (state === "Komplimente") {
     //der funktioniert schon ganz gut :)
     image(spielfläche, 0, 0, 800, 600);
     sprechblase.displaySpeech();
     sprechblase.count();
     sprechblase.displayCompliments();
-    // aloPlant.displayPlant();
+    aloPlant.displayPlant();
     wasserAnzeige.displayBar();
     wasserAnzeige.displayWater();
     waterButton.displayButton();
     compliments.displayButton();
-    if (sprechblase.timer == 0) {
+    if (sprechblase.timer === 0) {
       state = "gameScreen";
+    }
+  }
+
+  if (state === "Komplimente1") {
+    //der funktioniert schon ganz gut :)
+    image(spielfläche, 0, 0, 800, 600);
+    wasserstandTimer1 = 0;
+    sprechblase.displaySpeech();
+    sprechblase.count();
+    sprechblase.displayCompliments();
+    aloPlant.displayPlant();
+    wasserAnzeige.displayBar();
+    wasserAnzeige.displayWater();
+    waterButton.displayButton();
+    compliments.displayButton();
+    if (sprechblase.timer === 0) {
+      state = "Wassermarsch1";
     }
     //achtung hier mit der Wasseranzeige. Die muss den aktuellen Stand behalten
     //vielleicht sollte ich die einfach dann auf jedem Screen einfach einzeln anzeigen lassen
+  }
+  if (state === "Komplimente2") {
+    //der funktioniert schon ganz gut :)
+    image(spielfläche, 0, 0, 800, 600);
+    wasserstandTimer2 = 0;
+    sprechblase.displaySpeech();
+    sprechblase.count();
+    sprechblase.displayCompliments();
+    aloPlant.displayPlant();
+    wasserAnzeige.displayBar();
+    wasserAnzeige.displayWater();
+    waterButton.displayButton();
+    compliments.displayButton();
+    if (sprechblase.timer === 0) {
+      state = "Wassermarsch2";
+    }
+  }
+
+  if (state === "Komplimente3") {
+    //der funktioniert schon ganz gut :)
+    image(spielfläche, 0, 0, 800, 600);
+    wasserstandTimer3 = 0;
+    sprechblase.displaySpeech();
+    sprechblase.count();
+    sprechblase.displayCompliments();
+    aloPlant.displayPlant();
+    wasserAnzeige.displayBar();
+    wasserAnzeige.displayWater();
+    waterButton.displayButton();
+    compliments.displayButton();
+    if (sprechblase.timer === 0) {
+      state = "Wassermarsch3";
+    }
+  }
+  if (state === "Komplimente") {
+    //der funktioniert schon ganz gut :)
+    image(spielfläche, 0, 0, 800, 600);
+    wasserstandTimer3 = 0;
+    sprechblase.displaySpeech();
+    sprechblase.count();
+    sprechblase.displayCompliments();
+    aloPlant.displayPlant();
+    wasserAnzeige.displayBar();
+    wasserAnzeige.displayWater();
+    waterButton.displayButton();
+    compliments.displayButton();
+    if (sprechblase.timer === 0) {
+      state = "gameScreen";
+    }
   }
 }
 
@@ -120,7 +221,21 @@ function mouseClicked() {
     console.log(wasserAnzeige.h);
   }
 
-  if (compliments.hitTest()) {
+  if (compliments.hitTest() && state === "Wassermarsch1") {
+    state = "Komplimente1";
+    console.log("Kompliment gemacht");
+  }
+
+  if (compliments.hitTest() && state === "Wassermarsch2") {
+    state = "Komplimente2";
+    console.log("Kompliment 2 gemacht");
+  }
+  if (compliments.hitTest() && state === "Wassermarsch3") {
+    state = "Komplimente3";
+    console.log("Kompliment 3 gemacht");
+  }
+
+  if (compliments.hitTest() && state === "gameScreen") {
     state = "Komplimente";
     console.log("Kompliment gemacht");
   }

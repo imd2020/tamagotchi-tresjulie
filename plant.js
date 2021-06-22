@@ -2,7 +2,7 @@ export default class Plant {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
-    this.pic = loadImage("Projekt.png");
+    this.pic = loadImage("Alo_plant_transparent.png");
     this.width = width;
     this.height = height;
   }
