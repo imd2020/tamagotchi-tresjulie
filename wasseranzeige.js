@@ -6,6 +6,7 @@ export default class Thirsty {
     this.height = height;
     this.color = color;
     this.h = 0;
+    this.timer = 5;
   }
   displayBar() {
     push();
@@ -36,5 +37,8 @@ export default class Thirsty {
     rect(-this.width + 2, 0, this.width - 4, Math.abs(this.h - 20), 20);
     this.h = this.h - 2;
     pop();
+    if (frameCount % 30 === 0 && this.timer > 0) {
+      this.timer--;
+    }
   }
 }

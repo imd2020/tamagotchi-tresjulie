@@ -5,7 +5,12 @@ export default class Speechbubble {
     this.width = width;
     this.height = height;
     this.timer = 3;
-    this.randomMessages = ["Beautiful plant <3", "Grow, grow! You got this", "You look awesome!", "happy plant, happy me"];
+    this.randomMessages = [
+      "Beautiful plant <3",
+      "Grow, grow! You got this",
+      "You look awesome!",
+      "happy plant, happy me",
+    ];
     this.message = random(this.randomMessages);
   }
   displaySpeech() {
