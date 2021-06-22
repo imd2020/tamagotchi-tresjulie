@@ -1,3 +1,5 @@
+window.draw = draw;
+window.mouseClicked = mouseClicked;
 /*darf meine persönliche Handschrift aus ganz 
 vielen Booleans und strings bestehen? ;) */
 
@@ -29,7 +31,6 @@ function draw() {
   clear();
   console.log("state=" + state);
 
-  // console.log(wasserStand);
   if (state === "start") {
     image(spielfläche, 0, 0, 800, 600);
     firstButton.displayButton();
@@ -39,7 +40,6 @@ function draw() {
     sprechblase.timer = 3;
     sprechblase.message = random(sprechblase.randomMessages);
     wasserAnzeige.displayBar();
-    // aloPlant.displayPlant(); die habe ich rausgenommen, weil die sonst stört
     wasserAnzeige.displayWater();
     waterButton.displayButton();
     compliments.displayButton();
