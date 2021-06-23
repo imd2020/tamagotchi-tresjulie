@@ -19,10 +19,13 @@ with a tiny bit of help from Leander */
 //Die Wasserleiste soll sich in drei Teilen füllen.
 //bis jetzt geht nur,das zweimal gießen
 //beim dritten Mal klicken springt man auf den Screen davor siehe Zeile 136
-let spielfläche = loadImage("Alo_Game_screen.png");
+let spielfläche = loadImage("Alo_GameScreen_neu.png");
+let startScreen = loadImage("Alo_Start_Screen.png");
 let wasserstandTimer3 = 0;
 let wasserstandTimer2 = 0;
 let wasserstandTimer1 = 0;
+let whenIstartedThisGame = Date.now();
+let wateringHitter = 0;
 let state = "start";
 import Speechbubble from "./speechbubble.js";
 import Button from "./button_Alo.js";
@@ -37,17 +40,29 @@ let sprechblase = new Speechbubble(500, 250, 150, 30);
 
 function draw() {
   clear();
+  let secondsPassed = (Date.now() - whenIstartedThisGame) / 1000;
+  console.log(secondsPassed);
 
   // console.log("state=" + state);
   // console.log("Wasser= " + wasserAnzeige.h);
+  // aloPlant.grow();
+  // if (aloPlant.growTimer === 0) {
+  //   aloPlant.displayBigPlant();
+  // }
+  // console.log("ALoTimer=" + aloPlant.growTimer);
 
   if (state === "start") {
-    image(spielfläche, 0, 0, 800, 600);
+    image(startScreen, 0, 0, 800, 600);
     firstButton.displayButton();
-    aloPlant.displayPlant();
+    // aloPlant.displayPlant();
   }
   if (state === "gameScreen") {
     image(spielfläche, 0, 0, 800, 600);
+    push();
+    strokeWeight(5);
+    fill(0);
+    line(30, 255, 200, 255);
+    pop();
     wasserstandTimer1 = 0;
     aloPlant.displayPlant();
     sprechblase.timer = 4; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
@@ -60,6 +75,12 @@ function draw() {
 
   if (state === "Wassermarsch1") {
     image(spielfläche, 0, 0, 800, 600);
+    sprechblase.message = random(sprechblase.randomMessages);
+    push();
+    strokeWeight(5);
+    fill(0);
+    line(30, 255, 200, 255);
+    pop();
     compliments.displayButton();
     wasserstandTimer1++;
     console.log("Timer1=" + wasserstandTimer1);
@@ -71,19 +92,26 @@ function draw() {
     waterButton.displayButton();
     wasserAnzeige.waterRise();
 
-    if (wasserAnzeige.h < -40 && wasserAnzeige.h >= -119) {
-      wasserAnzeige.h = -40;
+    if (wasserAnzeige.h < -55 && wasserAnzeige.h >= -119) {
+      wasserAnzeige.h = -55;
     }
     if (wasserAnzeige.h < -175 && wasserAnzeige.h > -200) {
       wasserAnzeige.h = -175;
     }
-    if (wasserAnzeige.h === -40 && wasserstandTimer1 === 150) {
+    if (wasserAnzeige.h === -55 && wasserstandTimer1 === 150) {
       wasserAnzeige.h = 0;
       state = "gameScreen";
     }
   }
   if (state === "Wassermarsch2") {
     image(spielfläche, 0, 0, 800, 600);
+    sprechblase.message = random(sprechblase.randomMessages);
+    push();
+    strokeWeight(5);
+    fill(0);
+    line(30, 255, 200, 255);
+    line(30, 265, 200, 265);
+    pop();
     console.log("Timer2= " + wasserstandTimer2);
     wasserstandTimer1 = 0;
     wasserstandTimer2++;
@@ -95,22 +123,30 @@ function draw() {
     wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
-    if (wasserAnzeige.h < -120 && wasserAnzeige.h > -174) {
-      wasserAnzeige.h = -120;
+    if (wasserAnzeige.h < -110 && wasserAnzeige.h > -174) {
+      wasserAnzeige.h = -110;
     }
-    if (wasserAnzeige.h === -120 && wasserstandTimer2 === 150) {
-      wasserAnzeige.h = -40;
+    if (wasserAnzeige.h === -110 && wasserstandTimer2 === 150) {
+      wasserAnzeige.h = -55;
       state = "Wassermarsch1";
     }
   }
 
   if (state === "Wassermarsch3") {
     image(spielfläche, 0, 0, 800, 600);
+    sprechblase.message = random(sprechblase.randomMessages);
+    push();
+    strokeWeight(5);
+    fill(0);
+    line(30, 255, 200, 255);
+    line(30, 265, 200, 265);
+    pop();
     wasserstandTimer3++;
     wasserstandTimer2 = 0;
     console.log("Timer3= " + wasserstandTimer3);
     compliments.displayButton();
     aloPlant.displayPlant();
+
     wasserAnzeige.displayBar();
     waterButton.displayButton();
     wasserAnzeige.waterRise();
@@ -118,7 +154,7 @@ function draw() {
       wasserAnzeige.h = -175;
     }
     if (wasserAnzeige.h === -175 && wasserstandTimer3 === 150) {
-      wasserAnzeige.h = -120;
+      wasserAnzeige.h = -110;
       state = "Wassermarsch2";
     }
   }
@@ -126,6 +162,7 @@ function draw() {
   if (state === "Komplimente") {
     //der funktioniert schon ganz gut :)
     image(spielfläche, 0, 0, 800, 600);
+
     sprechblase.displaySpeech();
     sprechblase.count();
     sprechblase.displayCompliments();
@@ -142,6 +179,7 @@ function draw() {
   if (state === "Komplimente1") {
     //der funktioniert schon ganz gut :)
     image(spielfläche, 0, 0, 800, 600);
+
     wasserstandTimer1 = 0;
     sprechblase.displaySpeech();
     sprechblase.count();
@@ -160,6 +198,7 @@ function draw() {
   if (state === "Komplimente2") {
     //der funktioniert schon ganz gut :)
     image(spielfläche, 0, 0, 800, 600);
+
     wasserstandTimer2 = 0;
     sprechblase.displaySpeech();
     sprechblase.count();
@@ -177,6 +216,7 @@ function draw() {
   if (state === "Komplimente3") {
     //der funktioniert schon ganz gut :)
     image(spielfläche, 0, 0, 800, 600);
+
     wasserstandTimer3 = 0;
     sprechblase.displaySpeech();
     sprechblase.count();
@@ -190,29 +230,26 @@ function draw() {
       state = "Wassermarsch3";
     }
   }
-  if (state === "Komplimente") {
-    //der funktioniert schon ganz gut :)
-    image(spielfläche, 0, 0, 800, 600);
-    wasserstandTimer3 = 0;
-    sprechblase.displaySpeech();
-    sprechblase.count();
-    sprechblase.displayCompliments();
-    aloPlant.displayPlant();
-    wasserAnzeige.displayBar();
-    wasserAnzeige.displayWater();
-    waterButton.displayButton();
-    compliments.displayButton();
-    if (sprechblase.timer === 0) {
-      state = "gameScreen";
-    }
-  }
+  // if (state === "Komplimente") {
+  //   //der funktioniert schon ganz gut :)
+  //   image(spielfläche, 0, 0, 800, 600);
+  //   wasserstandTimer3 = 0;
+  //   sprechblase.displaySpeech();
+  //   sprechblase.count();
+  //   sprechblase.displayCompliments();
+  //   aloPlant.displayPlant();
+  //   wasserAnzeige.displayBar();
+  //   wasserAnzeige.displayWater();
+  //   waterButton.displayButton();
+  //   compliments.displayButton();
+  //   if (sprechblase.timer === 0) {
+  //     state = "gameScreen";
+  //   }
+  // }
 }
 
 // console.log(new Date());
 // new date.valueOf();
-
-// andere state Lösung mit Variabeln
-//Variabeln für Zustände
 
 function mouseClicked() {
   if (firstButton.hitTest()) {
@@ -223,12 +260,29 @@ function mouseClicked() {
     // console.log("Wasser gedrückt");
     console.log(wasserAnzeige.h);
   }
+  if (
+    state === "Wassermarsch1" &&
+    wasserAnzeige.h === -55 &&
+    waterButton.hitTest()
+  ) {
+    state = "Wassermarsch2";
+    wasserAnzeige.waterRise();
+    console.log("Wasser zwei mal gedrückt");
+  }
+  if (
+    state === "Wassermarsch2" &&
+    wasserAnzeige.h === -110 &&
+    waterButton.hitTest()
+  ) {
+    state = "Wassermarsch3";
+    wasserAnzeige.waterRise();
+    console.log("Wasser zum dritten Mal gedrückt");
+  }
 
   if (compliments.hitTest() && state === "Wassermarsch1") {
     state = "Komplimente1";
     console.log("Kompliment gemacht");
   }
-
   if (compliments.hitTest() && state === "Wassermarsch2") {
     state = "Komplimente2";
     console.log("Kompliment 2 gemacht");
@@ -241,33 +295,6 @@ function mouseClicked() {
   if (compliments.hitTest() && state === "gameScreen") {
     state = "Komplimente";
     console.log("Kompliment gemacht");
-  }
-
-  if (
-    state === "Wassermarsch1" &&
-    wasserAnzeige.h === -40 &&
-    waterButton.hitTest()
-  ) {
-    state = "Wassermarsch2";
-    wasserAnzeige.waterRise();
-    console.log("Wasser zwei mal gedrückt");
-  }
-
-  if (
-    state === "Wassermarsch2" &&
-    wasserAnzeige.h === -120 &&
-    waterButton.hitTest()
-  ) {
-    state = "Wassermarsch3";
-    wasserAnzeige.waterRise();
-    console.log("Wasser zum dritten Mal gedrückt");
-  }
-  if (
-    state === "Wassermarsch3" &&
-    wasserAnzeige.h === -180 &&
-    waterButton.hitTest()
-  ) {
-    wasserAnzeige.h = -180;
   }
 
   //ich überschreibe hier nicht die Wasseranzeige.h sondern legen
