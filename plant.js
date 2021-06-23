@@ -6,7 +6,7 @@ export default class Plant {
     this.pic2 = loadImage("Alo_mittel_neuer_Topf.png");
     this.width = width;
     this.height = height;
-    this.oftenWatered = 0;
+    this.howOftenWatered = 0;
   }
   displayPlant() {
     image(this.pic, this.x, this.y, this.width, this.height);
@@ -14,9 +14,11 @@ export default class Plant {
   displayBigPlant() {
     image(this.pic2, this.x, this.y, this.width, this.height);
   }
-  grow() {
-    if (this.oftenWatered === 21) {
-      this.displayBigPlant();
-    }
-  }
+  // grow() {
+  //   // this.whenIstartedThisGame = Date.now();
+  //   // this.secondsPassed = (Date.now() - whenIstartedThisGame) / 1000;
+  //   if (this.howOftenWatered < 5) {
+  //     this.displayPlant();
+  //   } else this.displayBigPlant();
+  // }
 }
