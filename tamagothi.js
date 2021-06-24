@@ -1,5 +1,6 @@
 window.draw = draw;
 window.mouseClicked = mouseClicked;
+import gsap from "./gsap.min.js";
 /*Sie sprachen in Ihrer Mail davon, dass wir unsere
 persönliche Handschrift verwenden dürfen.
 Ich habe meine gefunden: Zu kompliziert gedachter Code, trifft 
@@ -31,7 +32,7 @@ import Button from "./button_Alo.js";
 import Plant from "./plant.js";
 import Thirsty from "./wasseranzeige.js";
 let wasserAnzeige = new Thirsty(100, 200, 30, 200);
-let aloPlant = new Plant(400, 320, 150, 200);
+let aloPlant = new Plant(0, 320, 150, 200);
 let firstButton = new Button(100, 100, 60, 30, "Start");
 let waterButton = new Button(95, 450, 60, 30, "Water");
 let compliments = new Button(580, 450, 90, 30, "Compliments");
@@ -60,8 +61,8 @@ function draw() {
   if (state === "gameScreen") {
     image(spielfläche, 0, 0, 800, 600);
     wasserstandTimer1 = 0;
-    // aloPlant.displayPlant();
-    // aloPlant.grow();
+    console.log(aloPlant.x);
+
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
     } else if (aloPlant.howOftenWatered > 5 && aloPlant.howOftenWatered < 10) {
@@ -254,7 +255,9 @@ function draw() {
 function mouseClicked() {
   if (firstButton.hitTest()) {
     state = "gameScreen";
+    gsap.to(aloPlant, { x: 430, duration: 2.5, ease: "bounce.in" });
   }
+
   if (waterButton.hitTest() && state === "gameScreen") {
     state = "Wassermarsch1";
     aloPlant.howOftenWatered++;
