@@ -12,6 +12,7 @@ export default class Button {
     push();
     stroke(0);
     textAlign(LEFT);
+    textFont("MV Boli");
     // textStyle(ITALIC);
     noFill();
     text(this.message, this.x + 10, this.y + 20);

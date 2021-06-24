@@ -23,8 +23,6 @@ import Plant from "./plant.js";
 import Thirsty from "./wasseranzeige.js";
 let spielfläche = loadImage("Alo_GameScreen_neu.png");
 let startScreen = loadImage("Alo_Start_Screen.png");
-let kleineKomplimente = loadImage("wenig_sparkle_kleine_Pflanze.png");
-let großeKomplimente = loadImage("viele_sparkle_kleine_Pflanze.png");
 let wasserstandTimer3 = 0;
 let wasserstandTimer2 = 0;
 let wasserstandTimer1 = 0;
@@ -32,10 +30,11 @@ let whenIstartedThisGame = Date.now();
 let state = "start";
 let waterbar = new Thirsty(100, 200, 30, 200);
 let aloPlant = new Plant(0, 320, 150, 200);
-let firstButton = new Button(100, 100, 130, 30, "accept the challenge");
+let firstButton = new Button(90, 430, 110, 30, "start taking care");
 let waterButton = new Button(95, 450, 55, 30, "Water");
-let compliments = new Button(580, 450, 90, 30, "Compliments");
+let compliments = new Button(640, 450, 90, 30, "Compliments");
 let sprechblase = new Speechbubble(500, 250, 150, 30);
+let sparkles = new Speechbubble(380, 260, 250, 250);
 
 //seconds passend funktioniert noch nicht so
 function draw() {
@@ -46,11 +45,6 @@ function draw() {
   if (state === "start") {
     image(startScreen, 0, 0, 800, 600);
     firstButton.displayButton();
-    // text(
-    //   "Thanks, for taking care of Alo! I don’t know when I last watered her, But she should be fine. Not sure when I will be back,  but until then:Please don’t let her die!    In reward, I will clean the bathroom text time when it’s actually your turn.",
-    //   20,
-    //   250
-    // );
   }
   if (state === "gameScreen") {
     wasserstandTimer1 = 0;
@@ -60,7 +54,7 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayDryPlant();
-    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5) {
       aloPlant.displayDryBigPlant();
     }
   }
@@ -75,7 +69,7 @@ function draw() {
 
     if (aloPlant.howOftenWatered >= 1 && aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5) {
       aloPlant.displayBigPlant();
     }
 
@@ -101,7 +95,7 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5) {
       aloPlant.displayBigPlant();
     }
 
@@ -124,7 +118,7 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5) {
       aloPlant.displayBigPlant();
     }
 
@@ -140,12 +134,11 @@ function draw() {
   if (state === "NiceWords") {
     //der funktioniert schon ganz gut :)
     regularDisplay();
+    sparkles.displaySparkles();
     sprechblase.all();
     if (aloPlant.howOftenWatered < 5) {
-      // image(kleineKomplimente, 430, 320, 150, 200);
-      // image(großeKomplimente, 430, 320, 200, 200);
       aloPlant.displayDryPlant();
-    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5) {
       aloPlant.displayDryBigPlant();
     }
     if (sprechblase.timer === 0) {
@@ -155,13 +148,13 @@ function draw() {
 
   if (state === "NiceWordsOnce") {
     regularDisplay();
-
+    sparkles.displaySparkles();
     wasserstandTimer1 = 0;
     sprechblase.all();
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5) {
       aloPlant.displayBigPlant();
     }
 
@@ -173,10 +166,11 @@ function draw() {
     regularDisplay();
     wasserstandTimer2 = 0;
     sprechblase.all();
+    sparkles.displaySparkles();
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5) {
       aloPlant.displayBigPlant();
     }
     if (sprechblase.timer === 0) {
@@ -188,10 +182,11 @@ function draw() {
     regularDisplay();
     wasserstandTimer3 = 0;
     sprechblase.all();
+    sparkles.displaySparkles();
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5) {
       aloPlant.displayBigPlant();
     }
     if (sprechblase.timer === 0) {
@@ -203,17 +198,17 @@ function draw() {
 function mouseClicked() {
   if (firstButton.hitTest()) {
     state = "gameScreen";
-    gsap.to(aloPlant, { x: 430, duration: 2.5, ease: "bounce.in" });
+    gsap.to(aloPlant, { x: 430, duration: 2.5, ease: "bounce.out" });
   }
 
   if (waterButton.hitTest() && state === "gameScreen") {
     state = "WateredOnce";
     aloPlant.howOftenWatered++;
   }
+
   if (state === "WateredOnce" && waterbar.h === -55 && waterButton.hitTest()) {
     state = "WateredTwice";
     waterbar.waterRise();
-    // console.log("Wasser zwei mal gedrückt");
     aloPlant.howOftenWatered++;
   }
   if (
@@ -223,8 +218,16 @@ function mouseClicked() {
   ) {
     state = "WateredTripple";
     waterbar.waterRise();
-    console.log("Wasser zum dritten Mal gedrückt");
     aloPlant.howOftenWatered++;
+  }
+
+  if (compliments.hitTest() && state === "gameScreen") {
+    state = "NiceWords";
+    gsap.to(sparkles.displaySparkles(), {
+      x: 430,
+      duration: 2.5,
+      ease: "bounce.out",
+    });
   }
 
   if (compliments.hitTest() && state === "WateredOnce") {
@@ -235,10 +238,6 @@ function mouseClicked() {
   }
   if (compliments.hitTest() && state === "WateredTripple") {
     state = "NiceWordsTripple";
-  }
-
-  if (compliments.hitTest() && state === "gameScreen") {
-    state = "Komplimente";
   }
 
   /*Hier habe ich versucht die ganzen ClickEvents schöner und

@@ -16,6 +16,7 @@ export default class Speechbubble {
       "You're beautiful",
     ];
     this.message = random(this.randomMessages);
+    this.sparkles = loadImage("viele_sparkle_kleine_Pflanze.png");
   }
   displaySpeech() {
     push();
@@ -26,8 +27,8 @@ export default class Speechbubble {
     push();
     fill(255);
     noStroke();
-    translate(this.x + this.width / 5, this.y + this.height - 2);
-    triangle(0, 0, 10, 0, 0, 20);
+    translate(this.x + this.width - 30, this.y + this.height - 2);
+    triangle(0, 0, 10, 0, 10, 20);
     pop();
   }
   displayCompliments() {
@@ -45,6 +46,9 @@ export default class Speechbubble {
     if (frameCount % 30 === 0 && this.timer > 0) {
       this.timer = this.timer - 1;
     }
+  }
+  displaySparkles() {
+    image(this.sparkles, this.x, this.y, this.width, this.height);
   }
   all() {
     this.displaySpeech();
