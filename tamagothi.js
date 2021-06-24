@@ -1,6 +1,6 @@
 window.draw = draw;
 window.mouseClicked = mouseClicked;
-import gsap from "./gsap.min.js";
+// import gsap from "./gsap.min.js";
 /*Sie sprachen in Ihrer Mail davon, dass wir unsere
 persönliche Handschrift verwenden dürfen.
 Ich habe meine gefunden: Zu kompliziert gedachter Code, trifft 
@@ -30,7 +30,7 @@ let wasserstandTimer2 = 0;
 let wasserstandTimer1 = 0;
 let whenIstartedThisGame = Date.now();
 let state = "start";
-let wasserAnzeige = new Thirsty(100, 200, 30, 200);
+let waterbar = new Thirsty(100, 200, 30, 200);
 let aloPlant = new Plant(0, 320, 150, 200);
 let firstButton = new Button(100, 100, 130, 30, "accept the challenge");
 let waterButton = new Button(95, 450, 55, 30, "Water");
@@ -69,7 +69,7 @@ function draw() {
     regularDisplay();
     wasserstandTimer1++;
     wasserstandTimer2 = 0;
-    wasserAnzeige.waterRise();
+    waterbar.waterRise();
     sprechblase.timer = 2; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
     sprechblase.message = random(sprechblase.randomMessages);
 
@@ -79,20 +79,20 @@ function draw() {
       aloPlant.displayBigPlant();
     }
 
-    if (wasserAnzeige.h < -55 && wasserAnzeige.h >= -119) {
-      wasserAnzeige.h = -55;
+    if (waterbar.h < -55 && waterbar.h >= -119) {
+      waterbar.h = -55;
     }
-    if (wasserAnzeige.h < -175 && wasserAnzeige.h > -200) {
-      wasserAnzeige.h = -175;
+    if (waterbar.h < -175 && waterbar.h > -200) {
+      waterbar.h = -175;
     }
-    if (wasserAnzeige.h === -55 && wasserstandTimer1 === 60) {
-      wasserAnzeige.h = 0;
+    if (waterbar.h === -55 && wasserstandTimer1 === 60) {
+      waterbar.h = 0;
       state = "gameScreen";
     }
   }
   if (state === "WateredTwice") {
     regularDisplay();
-    wasserAnzeige.waterRise();
+    waterbar.waterRise();
     wasserstandTimer1 = 0;
     wasserstandTimer2++;
     wasserstandTimer3 = 0;
@@ -105,11 +105,11 @@ function draw() {
       aloPlant.displayBigPlant();
     }
 
-    if (wasserAnzeige.h < -110 && wasserAnzeige.h > -174) {
-      wasserAnzeige.h = -110;
+    if (waterbar.h < -110 && waterbar.h > -174) {
+      waterbar.h = -110;
     }
-    if (wasserAnzeige.h === -110 && wasserstandTimer2 === 60) {
-      wasserAnzeige.h = -55;
+    if (waterbar.h === -110 && wasserstandTimer2 === 60) {
+      waterbar.h = -55;
       state = "WateredOnce";
     }
   }
@@ -118,7 +118,7 @@ function draw() {
     regularDisplay();
     wasserstandTimer3++;
     wasserstandTimer2 = 0;
-    wasserAnzeige.waterRise();
+    waterbar.waterRise();
     sprechblase.timer = 2; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
     sprechblase.message = random(sprechblase.randomMessages);
 
@@ -128,11 +128,11 @@ function draw() {
       aloPlant.displayBigPlant();
     }
 
-    if (wasserAnzeige.h < -175 && wasserAnzeige.h > -200) {
-      wasserAnzeige.h = -175;
+    if (waterbar.h < -175 && waterbar.h > -200) {
+      waterbar.h = -175;
     }
-    if (wasserAnzeige.h === -175 && wasserstandTimer3 === 60) {
-      wasserAnzeige.h = -110;
+    if (waterbar.h === -175 && wasserstandTimer3 === 60) {
+      waterbar.h = -110;
       state = "WateredTwice";
     }
   }
@@ -210,23 +210,19 @@ function mouseClicked() {
     state = "WateredOnce";
     aloPlant.howOftenWatered++;
   }
-  if (
-    state === "WateredOnce" &&
-    wasserAnzeige.h === -55 &&
-    waterButton.hitTest()
-  ) {
+  if (state === "WateredOnce" && waterbar.h === -55 && waterButton.hitTest()) {
     state = "WateredTwice";
-    wasserAnzeige.waterRise();
+    waterbar.waterRise();
     // console.log("Wasser zwei mal gedrückt");
     aloPlant.howOftenWatered++;
   }
   if (
     state === "WateredTwice" &&
-    wasserAnzeige.h === -110 &&
+    waterbar.h === -110 &&
     waterButton.hitTest()
   ) {
     state = "WateredTripple";
-    wasserAnzeige.waterRise();
+    waterbar.waterRise();
     console.log("Wasser zum dritten Mal gedrückt");
     aloPlant.howOftenWatered++;
   }
@@ -270,6 +266,6 @@ function regularDisplay() {
   image(spielfläche, 0, 0, 800, 600);
   waterButton.displayButton();
   compliments.displayButton();
-  wasserAnzeige.displayWater();
-  wasserAnzeige.displayBar();
+  waterbar.displayWater();
+  waterbar.displayBar();
 }
