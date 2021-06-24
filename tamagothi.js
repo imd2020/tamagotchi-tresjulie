@@ -13,13 +13,14 @@ with a tiny bit of help from Leander */
 // console.log(new Date());
 // new date.valueOf();
 
-//WAS ICH NOCH MACHEN MUSS:
-//Mit den States klar kommen
 //ich brauche wahrscheinlich für die Wasseranzeige einen ganz eigenen Modus
 //der Wasserstand muss ja auch in jedem State den aktuellen Stand haben
 //sollte ich den Wasserstand vielleicht in einer Variable oder so speichern?
 //Die Wasserleiste soll sich in drei Teilen füllen.
-
+import Speechbubble from "./speechbubble.js";
+import Button from "./button_Alo.js";
+import Plant from "./plant.js";
+import Thirsty from "./wasseranzeige.js";
 let spielfläche = loadImage("Alo_GameScreen_neu.png");
 let startScreen = loadImage("Alo_Start_Screen.png");
 let kleineKomplimente = loadImage("wenig_sparkle_kleine_Pflanze.png");
@@ -29,66 +30,48 @@ let wasserstandTimer2 = 0;
 let wasserstandTimer1 = 0;
 let whenIstartedThisGame = Date.now();
 let state = "start";
-import Speechbubble from "./speechbubble.js";
-import Button from "./button_Alo.js";
-import Plant from "./plant.js";
-import Thirsty from "./wasseranzeige.js";
 let wasserAnzeige = new Thirsty(100, 200, 30, 200);
 let aloPlant = new Plant(0, 320, 150, 200);
-let firstButton = new Button(100, 100, 60, 30, "Start");
-let waterButton = new Button(95, 450, 60, 30, "Water");
+let firstButton = new Button(100, 100, 130, 30, "accept the challenge");
+let waterButton = new Button(95, 450, 55, 30, "Water");
 let compliments = new Button(580, 450, 90, 30, "Compliments");
 let sprechblase = new Speechbubble(500, 250, 150, 30);
 
 //seconds passend funktioniert noch nicht so
 function draw() {
   clear();
-  let secondsPassed = (Date.now() - whenIstartedThisGame) / 1000;
-  // console.log("Hitter=" + aloPlant.howOftenWatered);
-  // console.log("Seconds=" + secondsPassed);
-
-  // console.log("state=" + state);
-  // console.log("Wasser= " + wasserAnzeige.h);
-  // aloPlant.grow();
-  // if (aloPlant.growTimer === 0) {
-  //   aloPlant.displayBigPlant();
-  // }
-  // console.log("ALoTimer=" + aloPlant.growTimer);
+  console.log(state);
+  // let secondsPassed = (Date.now() - whenIstartedThisGame) / 1000;
 
   if (state === "start") {
     image(startScreen, 0, 0, 800, 600);
     firstButton.displayButton();
+    // text(
+    //   "Thanks, for taking care of Alo! I don’t know when I last watered her, But she should be fine. Not sure when I will be back,  but until then:Please don’t let her die!    In reward, I will clean the bathroom text time when it’s actually your turn.",
+    //   20,
+    //   250
+    // );
   }
   if (state === "gameScreen") {
-    image(spielfläche, 0, 0, 800, 600);
     wasserstandTimer1 = 0;
+    regularDisplay();
+    sprechblase.message = random(sprechblase.randomMessages);
+    sprechblase.timer = 2; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayDryPlant();
-    } else if (aloPlant.howOftenWatered > 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
       aloPlant.displayDryBigPlant();
     }
-    sprechblase.timer = 4; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
-    sprechblase.message = random(sprechblase.randomMessages);
-    wasserAnzeige.displayBar();
-    waterButton.displayButton();
-    compliments.displayButton();
-    wasserAnzeige.displayWater();
   }
 
-  if (state === "Wassermarsch1") {
-    image(spielfläche, 0, 0, 800, 600);
-    sprechblase.message = random(sprechblase.randomMessages);
-    compliments.displayButton();
+  if (state === "WateredOnce") {
+    regularDisplay();
     wasserstandTimer1++;
-    console.log("Timer1=" + wasserstandTimer1);
     wasserstandTimer2 = 0;
-    sprechblase.timer = 4; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
-    sprechblase.message = random(sprechblase.randomMessages);
-    // aloPlant.grow();
-    wasserAnzeige.displayBar();
-    waterButton.displayButton();
     wasserAnzeige.waterRise();
+    sprechblase.timer = 2; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
+    sprechblase.message = random(sprechblase.randomMessages);
 
     if (aloPlant.howOftenWatered >= 1 && aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
@@ -107,149 +90,112 @@ function draw() {
       state = "gameScreen";
     }
   }
-  if (state === "Wassermarsch2") {
-    image(spielfläche, 0, 0, 800, 600);
-    sprechblase.message = random(sprechblase.randomMessages);
-    console.log("Timer2= " + wasserstandTimer2);
+  if (state === "WateredTwice") {
+    regularDisplay();
+    wasserAnzeige.waterRise();
     wasserstandTimer1 = 0;
     wasserstandTimer2++;
-    sprechblase.timer = 4; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
-    sprechblase.message = random(sprechblase.randomMessages);
     wasserstandTimer3 = 0;
-    compliments.displayButton();
-    // aloPlant.displayPlant();
-    // aloPlant.grow();
+    sprechblase.timer = 2; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
+    sprechblase.message = random(sprechblase.randomMessages);
+
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered > 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
       aloPlant.displayBigPlant();
     }
-    wasserAnzeige.displayBar();
-    waterButton.displayButton();
-    wasserAnzeige.waterRise();
+
     if (wasserAnzeige.h < -110 && wasserAnzeige.h > -174) {
       wasserAnzeige.h = -110;
     }
     if (wasserAnzeige.h === -110 && wasserstandTimer2 === 60) {
       wasserAnzeige.h = -55;
-      state = "Wassermarsch1";
+      state = "WateredOnce";
     }
   }
 
-  if (state === "Wassermarsch3") {
-    image(spielfläche, 0, 0, 800, 600);
-    sprechblase.message = random(sprechblase.randomMessages);
+  if (state === "WateredTripple") {
+    regularDisplay();
     wasserstandTimer3++;
     wasserstandTimer2 = 0;
-    console.log("Timer3= " + wasserstandTimer3);
-    compliments.displayButton();
+    wasserAnzeige.waterRise();
+    sprechblase.timer = 2; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
+    sprechblase.message = random(sprechblase.randomMessages);
 
-    // aloPlant.displayPlant();
-    // aloPlant.grow();
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered > 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
       aloPlant.displayBigPlant();
     }
-    wasserAnzeige.displayBar();
-    waterButton.displayButton();
-    wasserAnzeige.waterRise();
+
     if (wasserAnzeige.h < -175 && wasserAnzeige.h > -200) {
       wasserAnzeige.h = -175;
     }
     if (wasserAnzeige.h === -175 && wasserstandTimer3 === 60) {
       wasserAnzeige.h = -110;
-      state = "Wassermarsch2";
+      state = "WateredTwice";
     }
   }
 
-  if (state === "Komplimente") {
+  if (state === "NiceWords") {
     //der funktioniert schon ganz gut :)
-    image(spielfläche, 0, 0, 800, 600);
-
-    sprechblase.displaySpeech();
-    sprechblase.count();
-    sprechblase.displayCompliments();
+    regularDisplay();
+    sprechblase.all();
     if (aloPlant.howOftenWatered < 5) {
       // image(kleineKomplimente, 430, 320, 150, 200);
       // image(großeKomplimente, 430, 320, 200, 200);
-      aloPlant.displayPlant();
+      aloPlant.displayDryPlant();
     } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
-      aloPlant.displayBigPlant();
+      aloPlant.displayDryBigPlant();
     }
-    wasserAnzeige.displayBar();
-    wasserAnzeige.displayWater();
-    waterButton.displayButton();
-    compliments.displayButton();
     if (sprechblase.timer === 0) {
       state = "gameScreen";
     }
   }
 
-  if (state === "Komplimente1") {
-    //der funktioniert schon ganz gut :)
-    image(spielfläche, 0, 0, 800, 600);
+  if (state === "NiceWordsOnce") {
+    regularDisplay();
 
     wasserstandTimer1 = 0;
-    sprechblase.displaySpeech();
-    sprechblase.count();
-    sprechblase.displayCompliments();
+    sprechblase.all();
+
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered > 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
       aloPlant.displayBigPlant();
     }
-    wasserAnzeige.displayBar();
-    wasserAnzeige.displayWater();
-    waterButton.displayButton();
-    compliments.displayButton();
-    if (sprechblase.timer === 0) {
-      state = "Wassermarsch1";
-    }
-    //achtung hier mit der Wasseranzeige. Die muss den aktuellen Stand behalten
-    //vielleicht sollte ich die einfach dann auf jedem Screen einfach einzeln anzeigen lassen
-  }
-  if (state === "Komplimente2") {
-    //der funktioniert schon ganz gut :)
-    image(spielfläche, 0, 0, 800, 600);
 
+    if (sprechblase.timer === 0) {
+      state = "WateredOnce";
+    }
+  }
+  if (state === "NiceWordsTwice") {
+    regularDisplay();
     wasserstandTimer2 = 0;
-    sprechblase.displaySpeech();
-    sprechblase.count();
-    sprechblase.displayCompliments();
+    sprechblase.all();
+
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered > 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
       aloPlant.displayBigPlant();
     }
-    wasserAnzeige.displayBar();
-    wasserAnzeige.displayWater();
-    waterButton.displayButton();
-    compliments.displayButton();
     if (sprechblase.timer === 0) {
-      state = "Wassermarsch2";
+      state = "WateredTwice";
     }
   }
 
-  if (state === "Komplimente3") {
-    //der funktioniert schon ganz gut :)
-    image(spielfläche, 0, 0, 800, 600);
-
+  if (state === "NiceWordsTripple") {
+    regularDisplay();
     wasserstandTimer3 = 0;
-    sprechblase.displaySpeech();
-    sprechblase.count();
-    sprechblase.displayCompliments();
+    sprechblase.all();
+
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered > 5 && aloPlant.howOftenWatered < 10) {
+    } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
       aloPlant.displayBigPlant();
     }
-    wasserAnzeige.displayBar();
-    wasserAnzeige.displayWater();
-    waterButton.displayButton();
-    compliments.displayButton();
     if (sprechblase.timer === 0) {
-      state = "Wassermarsch3";
+      state = "WateredTripple";
     }
   }
 }
@@ -261,45 +207,69 @@ function mouseClicked() {
   }
 
   if (waterButton.hitTest() && state === "gameScreen") {
-    state = "Wassermarsch1";
+    state = "WateredOnce";
     aloPlant.howOftenWatered++;
   }
   if (
-    state === "Wassermarsch1" &&
+    state === "WateredOnce" &&
     wasserAnzeige.h === -55 &&
     waterButton.hitTest()
   ) {
-    state = "Wassermarsch2";
+    state = "WateredTwice";
     wasserAnzeige.waterRise();
     // console.log("Wasser zwei mal gedrückt");
     aloPlant.howOftenWatered++;
   }
   if (
-    state === "Wassermarsch2" &&
+    state === "WateredTwice" &&
     wasserAnzeige.h === -110 &&
     waterButton.hitTest()
   ) {
-    state = "Wassermarsch3";
+    state = "WateredTripple";
     wasserAnzeige.waterRise();
     console.log("Wasser zum dritten Mal gedrückt");
     aloPlant.howOftenWatered++;
   }
 
-  if (compliments.hitTest() && state === "Wassermarsch1") {
-    state = "Komplimente1";
-    console.log("Kompliment gemacht");
+  if (compliments.hitTest() && state === "WateredOnce") {
+    state = "NiceWordsOnce";
   }
-  if (compliments.hitTest() && state === "Wassermarsch2") {
-    state = "Komplimente2";
-    console.log("Kompliment 2 gemacht");
+  if (compliments.hitTest() && state === "WateredTwice") {
+    state = "NiceWordsTwice";
   }
-  if (compliments.hitTest() && state === "Wassermarsch3") {
-    state = "Komplimente3";
-    console.log("Kompliment 3 gemacht");
+  if (compliments.hitTest() && state === "WateredTripple") {
+    state = "NiceWordsTripple";
   }
 
   if (compliments.hitTest() && state === "gameScreen") {
     state = "Komplimente";
-    console.log("Kompliment gemacht");
   }
+
+  /*Hier habe ich versucht die ganzen ClickEvents schöner und
+  übersichtlicher darzustellen,aber das hat leider nicht geklappt*/
+
+  // if (compliments.hitTest()) {
+  //   if (state === "gameScreen") {
+  //     state === "Komplimente";
+  //   }
+
+  //   if (state === "Wassermarsch1") {
+  //     state = "Komplimente1";
+  //   }
+
+  //   if (state === "Wassermarsch2") {
+  //     state = "Komplimente2";
+  //   }
+  //   if (state === "Wassermarsch3") {
+  //     state = "Komplimente3";
+  //   }
+  // }
+}
+
+function regularDisplay() {
+  image(spielfläche, 0, 0, 800, 600);
+  waterButton.displayButton();
+  compliments.displayButton();
+  wasserAnzeige.displayWater();
+  wasserAnzeige.displayBar();
 }

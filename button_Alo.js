@@ -11,6 +11,8 @@ export default class Button {
     rect(this.x, this.y, this.width, this.height, 20);
     push();
     stroke(0);
+    textAlign(LEFT);
+    // textStyle(ITALIC);
     noFill();
     text(this.message, this.x + 10, this.y + 20);
     pop();
@@ -28,5 +30,3 @@ export default class Button {
     }
   }
 }
-
-//button grau machen und andere Typo

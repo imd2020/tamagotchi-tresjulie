@@ -4,12 +4,16 @@ export default class Speechbubble {
     this.y = y;
     this.width = width;
     this.height = height;
-    this.timer = 3;
+    this.timer = 2;
     this.randomMessages = [
       "Beautiful plant <3",
       "Grow, grow! You got this",
       "You look awesome!",
       "happy plant, happy me",
+      "Please don't die...",
+      "I think...I like you",
+      "I'm sitting here..",
+      "You're beautiful",
     ];
     this.message = random(this.randomMessages);
   }
@@ -44,7 +48,7 @@ export default class Speechbubble {
   }
   all() {
     this.displaySpeech();
-    this.compliments();
+    this.displayCompliments();
     this.count();
   }
 }
