@@ -22,6 +22,8 @@ with a tiny bit of help from Leander */
 
 let spielfläche = loadImage("Alo_GameScreen_neu.png");
 let startScreen = loadImage("Alo_Start_Screen.png");
+let kleineKomplimente = loadImage("wenig_sparkle_kleine_Pflanze.png");
+let großeKomplimente = loadImage("viele_sparkle_kleine_Pflanze.png");
 let wasserstandTimer3 = 0;
 let wasserstandTimer2 = 0;
 let wasserstandTimer1 = 0;
@@ -42,8 +44,8 @@ let sprechblase = new Speechbubble(500, 250, 150, 30);
 function draw() {
   clear();
   let secondsPassed = (Date.now() - whenIstartedThisGame) / 1000;
-  console.log("Hitter=" + aloPlant.howOftenWatered);
-  console.log("Seconds=" + secondsPassed);
+  // console.log("Hitter=" + aloPlant.howOftenWatered);
+  // console.log("Seconds=" + secondsPassed);
 
   // console.log("state=" + state);
   // console.log("Wasser= " + wasserAnzeige.h);
@@ -56,17 +58,15 @@ function draw() {
   if (state === "start") {
     image(startScreen, 0, 0, 800, 600);
     firstButton.displayButton();
-    // aloPlant.displayPlant();
   }
   if (state === "gameScreen") {
     image(spielfläche, 0, 0, 800, 600);
     wasserstandTimer1 = 0;
-    console.log(aloPlant.x);
 
     if (aloPlant.howOftenWatered < 5) {
-      aloPlant.displayPlant();
+      aloPlant.displayDryPlant();
     } else if (aloPlant.howOftenWatered > 5 && aloPlant.howOftenWatered < 10) {
-      aloPlant.displayBigPlant();
+      aloPlant.displayDryBigPlant();
     }
     sprechblase.timer = 4; //der Timer muss immer wieder auf 4 gesetzt werden, damit er neu herunter zählen kann
     sprechblase.message = random(sprechblase.randomMessages);
@@ -90,7 +90,7 @@ function draw() {
     waterButton.displayButton();
     wasserAnzeige.waterRise();
 
-    if (aloPlant.howOftenWatered < 5) {
+    if (aloPlant.howOftenWatered >= 1 && aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
     } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
       aloPlant.displayBigPlant();
@@ -171,6 +171,8 @@ function draw() {
     sprechblase.count();
     sprechblase.displayCompliments();
     if (aloPlant.howOftenWatered < 5) {
+      // image(kleineKomplimente, 430, 320, 150, 200);
+      // image(großeKomplimente, 430, 320, 200, 200);
       aloPlant.displayPlant();
     } else if (aloPlant.howOftenWatered >= 5 && aloPlant.howOftenWatered < 10) {
       aloPlant.displayBigPlant();
@@ -269,7 +271,7 @@ function mouseClicked() {
   ) {
     state = "Wassermarsch2";
     wasserAnzeige.waterRise();
-    console.log("Wasser zwei mal gedrückt");
+    // console.log("Wasser zwei mal gedrückt");
     aloPlant.howOftenWatered++;
   }
   if (
