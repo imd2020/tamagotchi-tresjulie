@@ -1,4 +1,4 @@
-export default class Speechbubble {
+export default class Compliment {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
