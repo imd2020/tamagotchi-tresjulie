@@ -34,7 +34,7 @@ let firstButton = new Button(90, 430, 110, 30, "start taking care");
 let waterButton = new Button(95, 450, 55, 30, "Water");
 let compliments = new Button(640, 450, 90, 30, "Compliments");
 let sprechblase = new Speechbubble(500, 250, 150, 30);
-let sparkles = new Speechbubble(380, 260, 250, 250);
+let sparkles = new Speechbubble(370, 230, 260, 250);
 
 //seconds passend funktioniert noch nicht so
 function draw() {
@@ -54,8 +54,13 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayDryPlant();
-    } else if (aloPlant.howOftenWatered >= 5) {
+    } else if (
+      aloPlant.howOftenWatered >= 5 &&
+      aloPlant.howOftenWatered <= 15
+    ) {
       aloPlant.displayDryBigPlant();
+    } else if (aloPlant.howOftenWatered >= 16) {
+      aloPlant.displayDryVeryBigPlant();
     }
   }
 
@@ -69,8 +74,13 @@ function draw() {
 
     if (aloPlant.howOftenWatered >= 1 && aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5) {
+    } else if (
+      aloPlant.howOftenWatered >= 5 &&
+      aloPlant.howOftenWatered <= 15
+    ) {
       aloPlant.displayBigPlant();
+    } else if (aloPlant.howOftenWatered >= 16) {
+      aloPlant.displayVeryBigPlant();
     }
 
     if (waterbar.h < -55 && waterbar.h >= -119) {
@@ -95,8 +105,13 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5) {
+    } else if (
+      aloPlant.howOftenWatered >= 5 &&
+      aloPlant.howOftenWatered <= 15
+    ) {
       aloPlant.displayBigPlant();
+    } else if (aloPlant.howOftenWatered >= 16) {
+      aloPlant.displayVeryBigPlant();
     }
 
     if (waterbar.h < -110 && waterbar.h > -174) {
@@ -118,8 +133,13 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5) {
+    } else if (
+      aloPlant.howOftenWatered >= 5 &&
+      aloPlant.howOftenWatered <= 15
+    ) {
       aloPlant.displayBigPlant();
+    } else if (aloPlant.howOftenWatered >= 16) {
+      aloPlant.displayVeryBigPlant();
     }
 
     if (waterbar.h < -175 && waterbar.h > -200) {
@@ -138,9 +158,15 @@ function draw() {
     sprechblase.all();
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayDryPlant();
-    } else if (aloPlant.howOftenWatered >= 5) {
+    } else if (
+      aloPlant.howOftenWatered >= 5 &&
+      aloPlant.howOftenWatered <= 15
+    ) {
       aloPlant.displayDryBigPlant();
+    } else if (aloPlant.howOftenWatered >= 16) {
+      aloPlant.displayDryVeryBigPlant();
     }
+
     if (sprechblase.timer === 0) {
       state = "gameScreen";
     }
@@ -154,8 +180,13 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5) {
+    } else if (
+      aloPlant.howOftenWatered >= 5 &&
+      aloPlant.howOftenWatered <= 15
+    ) {
       aloPlant.displayBigPlant();
+    } else if (aloPlant.howOftenWatered >= 16) {
+      aloPlant.displayVeryBigPlant();
     }
 
     if (sprechblase.timer === 0) {
@@ -170,8 +201,13 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5) {
+    } else if (
+      aloPlant.howOftenWatered >= 5 &&
+      aloPlant.howOftenWatered <= 15
+    ) {
       aloPlant.displayBigPlant();
+    } else if (aloPlant.howOftenWatered >= 16) {
+      aloPlant.displayVeryBigPlant();
     }
     if (sprechblase.timer === 0) {
       state = "WateredTwice";
@@ -186,8 +222,13 @@ function draw() {
 
     if (aloPlant.howOftenWatered < 5) {
       aloPlant.displayPlant();
-    } else if (aloPlant.howOftenWatered >= 5) {
+    } else if (
+      aloPlant.howOftenWatered >= 5 &&
+      aloPlant.howOftenWatered <= 15
+    ) {
       aloPlant.displayBigPlant();
+    } else if (aloPlant.howOftenWatered >= 16) {
+      aloPlant.displayVeryBigPlant();
     }
     if (sprechblase.timer === 0) {
       state = "WateredTripple";
@@ -223,21 +264,48 @@ function mouseClicked() {
 
   if (compliments.hitTest() && state === "gameScreen") {
     state = "NiceWords";
-    gsap.to(sparkles.displaySparkles(), {
-      x: 430,
-      duration: 2.5,
-      ease: "bounce.out",
+    gsap.to(sparkles, {
+      y: 260,
+      duration: 3,
+      ease: "power4.out",
+      onComplete: () => {
+        sparkles.y = 230;
+      },
     });
   }
 
   if (compliments.hitTest() && state === "WateredOnce") {
     state = "NiceWordsOnce";
+    gsap.to(sparkles, {
+      y: 260,
+      duration: 3,
+      ease: "power4.out",
+      onComplete: () => {
+        sparkles.y = 230;
+      },
+    });
   }
   if (compliments.hitTest() && state === "WateredTwice") {
     state = "NiceWordsTwice";
+    gsap.to(sparkles, {
+      y: 260,
+      duration: 3,
+      ease: "power4.out",
+      onComplete: () => {
+        sparkles.y = 230;
+      },
+    });
   }
   if (compliments.hitTest() && state === "WateredTripple") {
     state = "NiceWordsTripple";
+    gsap.to(sparkles, {
+      y: 260,
+      duration: 3,
+      ease: "power4.out",
+      onComplete: () => {
+        sparkles.y = 230;
+      },
+    });
   }
 
   /*Hier habe ich versucht die ganzen ClickEvents schöner und
