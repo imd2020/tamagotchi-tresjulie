@@ -17,7 +17,7 @@ with a tiny bit of help from Leander */
 //der Wasserstand muss ja auch in jedem State den aktuellen Stand haben
 //sollte ich den Wasserstand vielleicht in einer Variable oder so speichern?
 //Die Wasserleiste soll sich in drei Teilen füllen.
-import Speechbubble from "./speechbubble.js";
+// import Speechbubble from "./speechbubble.js";
 import Button from "./button_Alo.js";
 import Plant from "./plant.js";
 import Thirsty from "./waterbar.js";
